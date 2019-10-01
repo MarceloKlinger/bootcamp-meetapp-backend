@@ -1,9 +1,27 @@
 {
   "name": "bootcamp-meetapp-backend",
   "version": "1.0.0",
+  "author": {
+    "name": "Marcelo Klinger da Rocha Santos",
+    "email": "marcelo.klinger@hotmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MarceloKlinger/bootcamp-meetapp-backend"
+  },
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/server.js"
+  },
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.5.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "nodemon": "^1.19.3",
+    "sucrase": "^3.10.1"
   }
 }
