@@ -9,9 +9,6 @@ class Meetup extends Model {
         description: Sequelize.STRING,
         location: Sequelize.STRING,
         date: Sequelize.DATE,
-        user_id: Sequelize.INTEGER,
-        file_id: Sequelize.INTEGER,
-        canceled_at: Sequelize.DATE,
         past: {
           type: Sequelize.VIRTUAL,
           get() {

@@ -8,38 +8,34 @@ module.exports = {
         primaryKey: true,
       },
       title: {
-        allowNull: false,
         type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
       },
       description: {
-        allowNull: false,
         type: Sequelize.STRING,
+        allowNull: false,
       },
       location: {
-        allowNull: false,
         type: Sequelize.STRING,
+        allowNull: false,
       },
       date: {
-        allowNull: false,
         type: Sequelize.DATE,
+        allowNull: false,
       },
       file_id: {
         type: Sequelize.INTEGER,
-        references: { model: 'files', key: 'id' },
+        reference: { model: 'files', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
         allowNull: true,
       },
       user_id: {
         type: Sequelize.INTEGER,
-        references: { model: 'users', key: 'id' },
+        reference: { model: 'users', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
-        allowNull: false,
-      },
-
-      canceled_at: {
-        type: Sequelize.DATE,
         allowNull: true,
       },
       created_at: {
@@ -49,6 +45,10 @@ module.exports = {
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
+      },
+      canceled_at: {
+        type: Sequelize.DATE,
+        allowNull: true,
       },
     });
   },
