@@ -1,14 +1,20 @@
 import * as Yup from 'yup';
-import { parseISO, isBefore } from 'date-fns';
+import { parseISO, isBefore, format } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 import User from '../models/User';
 import File from '../models/File';
 import Meetup from '../models/Meetup';
+import Notification from '../schemas/Notification';
 
 class MeetupController {
   async index(req, res) {
+    const { page } = req.query;
+
     const meetups = await Meetup.findAll({
       order: ['date'],
       attributes: ['id', 'title', 'description', 'location', 'date'],
+      limit: 10,
+      offset: (page - 1) * 10,
       include: [
         {
           model: User,
@@ -18,7 +24,7 @@ class MeetupController {
         {
           model: File,
           as: 'banner',
-          attributes: ['id', 'path'],
+          attributes: ['id', 'path', 'url'],
         },
       ],
     });
@@ -46,22 +52,24 @@ class MeetupController {
       return res.status(400).json({ error: 'Past dates are not permitted' });
     }
 
-    const checkAvailability = await Meetup.findOne({
-      where: {
-        user_id: req.userId,
-        canceled_at: null,
-        date: req.body.date,
-      },
-    });
-
-    if (checkAvailability) {
-      return res
-        .status(400)
-        .json({ error: 'Meetup date/hour is not available' });
-    }
+    const user_id = req.userId;
 
     const meetup = await Meetup.create({
       ...req.body,
+      user_id,
+    });
+
+    // Notify Meetup user
+
+    const formattedDate = format(
+      req.body.date,
+      " 'dia' dd  'de' MMMM', às' H:mm'h'",
+      // 22 de dezembro de 2019
+      { locale: pt }
+    );
+
+    await Notification.create({
+      content: `Novo Meetup de ${req.userId}  para o ${formattedDate}`,
       user_id: req.userId,
     });
 
