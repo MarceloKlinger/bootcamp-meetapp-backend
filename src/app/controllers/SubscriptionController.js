@@ -1,27 +1,24 @@
 import Meetup from '../models/Meetup';
-import File from '../models/File';
+import Subscription from '../models/Subscription';
 
 class SubscriptionController {
   async index(req, res) {
-    const meetups = await Meetup.findAll({
+    const subs = await Subscription.findAll({
       where: {
         user_id: req.userId,
         canceled_at: null,
       },
 
-      order: ['date'],
-      attributes: ['id', 'title', 'description', 'location', 'date'],
-
       include: [
         {
-          model: File,
-          as: 'banner',
-          attributes: ['id', 'path', 'url'],
+          model: Meetup,
+          as: 'meetup',
+          attributes: ['id', 'title', 'location', 'date'],
         },
       ],
     });
 
-    return res.json(meetups);
+    return res.json(subs);
   }
 }
 
